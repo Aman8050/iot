@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IOT - Dashboard</title>
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/datepicker3.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+
+<!-- script to render graph -->
+<script src="/lib/jquery/jquery-2.1.0.min.js"></script>
+
+<!--Icons-->
+<script src="js/lumino.glyphs.js"></script>
+</head>
+
+
+<body>
+
+<!-- ########################################################################### -->
+<!-- nodejs code and code to render chart -->
+<script type="text/javascript" src="amcharts.js"></script>
+<script type="text/javascript" src="gauge.js"></script>
+<script src="http://cdn.pubnub.com/pubnub.min.js"></script>
+<script type="text/javascript" src="//pubnub.github.io/eon/v/eon/0.0.10/eon.js"></script>
+<link type="text/css" rel="stylesheet" href="//pubnub.github.io/eon/v/eon/0.0.10/eon.css"/>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+      $('#uploadForm').submit(function() {
+		 	$("#progressBar").show();
+		 	$("#uploadForm").css("display","none");
+		 });
+
+	 	var socket = io.connect('http://localhost:3000');
+	 	
+	 	socket.on('socketId', function(data) {
+	 		return $('#socketId').val(data);
+	 	});
+
+// array to store values of sensors
+temp=[];
+hum=[];
+accx=[];
+accy=[];
+accz=[];
+intensity=[];
+motion=[];
+
+
+//dummy initial data
+temp=[0,0,0,0,0,0,0,0,0,0];
+hum=[0,0,0,0,0,0,0,0,0,0];
+accx=[0,0,0,0,0,0,0,0,0,0];
+accy=[0,0,0,0,0,0,0,0,0,0];
+accz=[0,0,0,0,0,0,0,0,0,0];
+intensity=[0,0,0,0,0,0,0,0,0,0];
+motion=[0,0,0,0,0,0,0,0,0,0];
+
+        // on message received we print all the data inside the #container div
+        socket.on('notification', function (data) {
+       // var usersList = "<dl>";
+        $.each(data.users,function(index,user){
+            //usersList += "<dt>" + user.temperature + "</dt>" ;
+	    temp.push(user.temperature);
+      hum.push(user.humidity);
+      accx.push(user.accx);
+      accy.push(user.accy);
+      accz.push(user.accz);
+      intensity.push(user.intensity);
+      motion.push(user.motion);
+
+        if (temp.length > 10)
+            temp.shift();
+        if (hum.length > 10)
+            hum.shift();
+        if (accx.length > 10)
+            accx.shift();
+        if (accy.length > 10)
+            accy.shift();
+        if (accz.length > 10)
+            accz.shift();
+        if (intensity.length > 10)
+            intensity.shift();
+        if (motion.length > 10)
+            motion.shift();
+        
+
+		console.log("fosee" +temp);
+                         
+        });
+
+	 	socket.on('upload-progress', function(data) {
+ 			$('.progress-bar').css('width', data.value+'%').attr('aria-valuenow', data.value).text(data.value+'%');
+	 	});
+
+	 });   
+    </script>
+
+
+<!-- Temperature chart -->
+<script src="js/charts/temperature.js"></script>
+ 
+<!-- Humidity chart -->
+<script src="js/charts/humidity.js"></script>
+
+<!-- Accelerometer chart -->
+<script src="js/charts/acceleration.js"></script>
+
+<!-- intensity Chart -->
+<script src="js/charts/intensity.js"></script>
+
+<!-- Motion Detector Chart -->
+<script src="js/charts/motion.js"></script>
+
+<!-- original template thing -->
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><span>IOT</span>Dashboard</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> {{user.name}} <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="/logout"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"></use></svg> Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+							
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<ul class="nav menu">
+			<li class="parent ">
+				<a href="#">
+					<span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Sensors 
+				</a>
+				<ul class="children collapse" id="sub-item-1">
+					<li>
+ 
+          <a id="1" class=""  value="Temperature" onClick="t()">
+				  <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Temperature
+						</a>
+				</li>
+				<li>
+          <a id="2" class="" value="Humidity" onClick="h()">
+          <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Humidity
+					</a>
+        </li>
+				<li>
+          <a id="3" class="" value="Acceleration" onclick="accel()">
+	         <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Acceleration
+					</a>
+				</li>
+				<li>
+            <a id="4" class="" value="Intensity" onClick="light()">
+						<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Intensity
+						</a>
+				</li>
+				<li>
+            <a id="5" class="" value="Motion" onClick="m()">
+						<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Motion
+						</a>
+				</li>
+			</ul>
+			</ul>
+		    </li>
+			  <li role="presentation" class="divider"></li>
+		</ul>
+
+	</div><!--/.sidebar-->
+		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+	<br>			
+		<div class="row">
+			<div class="col-lg-8">
+				<div class="panel panel-default">
+					<div class="panel-heading">Line Graph</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<!-- place to render chart -->
+						<div id="chart1" style="width:700px;height:370px;float:left;"></div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<!-- add absolute value graph here -->
+			<div class="col-lg-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">Absolute Value Graph</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+						<!-- place to add div tag to render chart -->
+                <div id="chart2" style="width:350px; height:370px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->
+	</div>
+		<!--/.main-->
+
+<script src="js/bootstrap.min.js"></script>
+<script src="footer.js"></script>
+<script src="functionOnload.js"></script>
+
+
+</body>
+</html>
+<!-- end of the code -->
