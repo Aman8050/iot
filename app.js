@@ -98,7 +98,7 @@ console.log(users);
 
 /*                                                              */
 //Routes
-require('./routes')(app, passport, io);
+require('./routes')(app, passport, io,connection);
 
 //Sockets
 io.set('log level', 1);
