@@ -1,6 +1,6 @@
 function m(){
 
-
+document.getElementById("chart2").innerHTML="";
 document.getElementById("5").style.pointerEvents="none";
 document.getElementById("1").style.cursor="pointer";
 document.getElementById("2").style.pointerEvents="auto";
@@ -43,42 +43,47 @@ document.getElementById("1").style.pointerEvents="auto";
         });
 
       }, 1000);
-      var chart = AmCharts.makeChart( "chart2", {
-  "theme": "light",
-  "type": "gauge",
-  "axes": [ {
-    "axisColor": "red",
-    "axisThickness": 3,
-    "endValue": 240,
-    "gridInside": false,
-    "inside": false,
-    "radius": "100%",
-    "valueInterval": 20,
-    "tickColor": "#67b7dc"
-  }, {
-    "axisColor": "#fdd400",
-    "axisThickness": 3,
-    "endValue": 160,
-    "radius": "80%",
-    "valueInterval": 20,
-    "tickColor": "#fdd400"
-  } ],
-  "arrows": [ {
-    "color": "#67b7dc",
-    "innerRadius": "20%",
-    "nailRadius": 0,
-    "radius": "85%"
-  } ],
-  "export": {
-    "enabled": true
-  }
-} );
 
-setInterval( randomValue, 2000 );
 
-// set random value
-function randomValue() {
-  var value = motion[motion.length-1];
-  chart.arrows[ 0 ].setValue( value );
-}
+      var svg = d3.select("#chart2")
+                .append("svg:svg")
+                .attr("width", 400)
+                .attr("height", 400);
+
+
+        var gauge = iopctrl.arcslider()
+                .radius(120)
+                .events(false)
+                .indicator(iopctrl.defaultGaugeIndicator);
+        gauge.axis().orient("in")
+                .normalize(true)
+                .ticks(12)
+                .tickSubdivide(3)
+                .tickSize(10, 8, 10)
+                .tickPadding(5)
+                .scale(d3.scale.linear()
+                        .domain([0, 160])
+                        .range([-3*Math.PI/4, 3*Math.PI/4]));
+
+        var segDisplay = iopctrl.segdisplay()
+                .width(80)
+                .digitCount(6)
+                .negative(false)
+                .decimals(0);
+
+        svg.append("g")
+                .attr("class", "segdisplay")
+                .attr("transform", "translate(130, 200)")
+                .call(segDisplay);
+
+        svg.append("g")
+                .attr("class", "gauge")
+                .call(gauge);
+
+        
+        setInterval(function(){
+          gauge.value(motion[motion.length-1])
+          segDisplay.value(motion[motion.length-1]);
+
+        },2000);
     }

@@ -10,6 +10,69 @@
 <link href="css/datepicker3.css" rel="stylesheet">
 <link href="css/styles.css" rel="stylesheet">
 
+
+<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Play:700,400' type='text/css'>
+<script type="text/javascript" src="http://iop.io/js/vendor/d3.v3.min.js"></script>
+<script type="text/javascript" src="http://iop.io/js/vendor/polymer/PointerEvents/pointerevents.js"></script>
+<script type="text/javascript" src="http://iop.io/js/vendor/polymer/PointerGestures/pointergestures.js"></script>
+<script type="text/javascript" src="http://iop.io/js/iopctrl.js"></script>
+
+
+
+
+<style>
+        .unselectable {
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* css formats for the gauge */
+        .gauge .domain {
+            stroke-width: 2px;
+            stroke: black;
+        }
+
+        .gauge .tick line {
+            stroke: #fff;
+            stroke-width: 2px;
+        }
+        
+        .gauge line {
+            stroke: black;
+        }
+
+        .gauge .arc, .gauge .cursor {
+            opacity: 0;
+        }
+
+        .gauge .major {
+            fill: black;
+            font-size: 20px;
+            font-family: 'Play', verdana, sans-serif;
+            font-weight: normal;
+        }
+        
+        .gauge .indicator {
+            stroke: black;
+            fill: #000;
+            stroke-width: 4px;
+        }
+
+        /* css formats for the segment display */
+        .segdisplay .on {
+            fill: black;
+
+        }
+
+        .segdisplay .off {
+            fill: black;
+            opacity: 0.15;
+        }
+</style>   
+
 <!-- script to render graph -->
 <script src="/lib/jquery/jquery-2.1.0.min.js"></script>
 
@@ -98,7 +161,7 @@ motion=[0,0,0,0,0,0,0,0,0,0];
 	 	});
 
 	 });   
-    </script>
+</script>
 
 
 <!-- Temperature chart -->
@@ -159,7 +222,7 @@ motion=[0,0,0,0,0,0,0,0,0,0];
 					</a>
         </li>
 				<li>
-          <a id="3" class="" value="Acceleration" onclick="accel()">
+          <a id="3" class="" value="Acceleration" onclick="a()">
 	         <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Acceleration
 					</a>
 				</li>

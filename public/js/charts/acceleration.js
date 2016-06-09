@@ -1,4 +1,4 @@
-function accel(){
+function a(){
 
 document.getElementById("3").style.pointerEvents="none";
 document.getElementById("2").style.pointerEvents="auto";
