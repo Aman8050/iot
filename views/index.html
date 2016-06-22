@@ -1,39 +1,54 @@
-	<html>
- 
-<head>
-    <title>CloudVideo</title>
-    
-	<script src="/lib/jquery/jquery-2.1.0.min.js"></script>
+<!DOCTYPE HTML>
+<!--
+	Retrospect by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>IOT DASHBOARD</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+	</head>
+	<body class="landing">
 
-	<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap-theme.min.css">
-	<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+		<!-- Header -->
+			<header id="header" class="alt">
+				<!-- <h1><a href="index.html">Retrospect</a></h1> -->
+				<a href="#nav">Menu</a>
+			</header>
 
-</head>
+		<!-- Nav -->
+			<nav id="nav">
+				<ul class="links">
+					<li><a href="/login">Login</a></li>
+					<li><a href="/register">Register</a></li>
+					<li><a href="/help">Need Help</a></li>
+					<li><a href="/documentation">Documentation</a></li>
+					<li><a href="/contact">Contact Us</a></li>
+				</ul>
+			</nav>
 
-	<div class="container">
-	<div class="col-sm-6 col-sm-offset-3">
-	<h1>Login</h1>
+		<!-- Banner -->
+			<section id="banner">
+				<i class="icon fa-diamond"></i>
+				<h2>IOT DASHBOARD</h2>
+				<p>A real time "Internet of Things" dashboard</p>
+				<ul class="actions">
+					<li><a href="https://en.wikipedia.org/wiki/Internet_of_things"  target="_blank" class="button big special">Learn More</a></li>
+				</ul>
+			</section>
 
-	{{#if message}}
-	<div class="alert alert-danger">{{message}}</div>
-	{{/if}}
+			<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="assets/js/main.js"></script>
 
-	<form action="/login", method="post">
-		<div class="form-group">
-			<label>Email:</label>
-			<input type="text" name="email" class="form-control" placeholder="Enter email" />
-		</div>
-
-		<div class="form-group">
-			<label>Password:</label>
-			<input type="password" name="password" class="form-control" placeholder="Enter password"/>
-		</div>
-
-		<button type="submit" class="btn btn-warning">Login</button>
-	</form>
-
-	<hr>
-	<p>Need an account? <a href="/register">Register</a></p>
-	</div>
-	</div>
+	</body>
+</html>

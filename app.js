@@ -13,8 +13,8 @@ var fs = require('fs'),
   connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'maverick1', //change your password here.
-     database: 'nodejs',
+    password: 'jaishreeshyam', //change your password here.
+     database: 'iot',
     port: 3306
   }),
   POLLING_INTERVAL = 4000,
@@ -37,6 +37,10 @@ connection.connect(function(err) {
 
 //Database
 mongoose.connect('mongodb://localhost/VideoCloud');
+
+
+
+
 
 //Passport config
 require('./config/passport')(passport);
@@ -67,6 +71,7 @@ var pollingLoop = function() {
   // Doing the database query
 var query = connection.query('SELECT * FROM sensors order by id desc limit 1'),
     users = []; // this array will contain the result of our db query
+    data=[];
 
   // setting the query listeners
   query
@@ -78,7 +83,24 @@ var query = connection.query('SELECT * FROM sensors order by id desc limit 1'),
     .on('result', function(user) {
       // it fills our array looping on each user row inside the db
       users.push(user);
-console.log(users);
+
+      console.log(users);
+      var temp=Number(user.temperature);
+      var humidity=Number(user.humidity);
+      var accx=Number(user.accx);
+      var accy=Number(user.accy);
+      var accz=Number(user.accz);
+      var intensity=Number(user.intensity);
+      var motion=Number(user.motion);
+
+      data.push(temp);
+      data.push(humidity);
+      data.push(accx);
+      data.push(accy);
+      data.push(accz);
+      data.push(intensity);
+      data.push(motion);
+
     })
     .on('end', function() {
       // loop on itself only if there are sockets still connected
@@ -86,12 +108,9 @@ console.log(users);
 
         pollingTimer = setTimeout(pollingLoop, POLLING_INTERVAL);
 
-        updateSockets({
-          users: users
-        });
+        updateSockets(data);
       } else {
         console.log('The server timer was stopped because there are no more socket connections on the app')
-
       }
     });
 };
@@ -134,6 +153,6 @@ var updateSockets = function(data) {
 };
 
 //Server
-server.listen(3000, function() {
-	console.log('Listening on port %d', server.address().port);
+server.listen(8000, function() {
+	console.log('Listening on port 8000');
 });

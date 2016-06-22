@@ -24,7 +24,7 @@ module.exports = function(passport) {
 	};
 
 	var facebookFields = {
-		clientID: configAuth.facebookAuth.clientID,
+	clientID: configAuth.facebookAuth.clientID,
         clientSecret: configAuth.facebookAuth.clientSecret,
         callbackURL: configAuth.facebookAuth.callbackURL,
         passReqToCallback : true

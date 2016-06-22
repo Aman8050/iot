@@ -1,5 +1,6 @@
 function a(){
 
+document.getElementById('shivam').style.display = 'block';
 document.getElementById("3").style.pointerEvents="none";
 document.getElementById("2").style.pointerEvents="auto";
 document.getElementById("1").style.pointerEvents="auto";
@@ -33,9 +34,9 @@ document.getElementById("5").style.pointerEvents="auto";
           channel: channel3,
           message: {
             eon: {
-              'accx': accx[accx.length-1],
-              'accy': accy[accy.length-1],
-              'accz': accz[accz.length-1]
+              'accx': accx,
+              'accy': accy,
+              'accz': accz
             }
           }
         });
@@ -73,9 +74,9 @@ document.getElementById("5").style.pointerEvents="auto";
           channel: channel8,
           message: {
             eon: {
-              'Acc-x': accx[accx.length-1],
-              'Acc-y': accy[accy.length-1],
-              'Acc-z': accz[accz.length-1]
+              'Acc-x': accx,
+              'Acc-y': accy,
+              'Acc-z': accz
             }
           }
         });

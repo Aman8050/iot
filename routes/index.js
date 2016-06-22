@@ -4,20 +4,6 @@ var fs = require('fs');
 var Video = require('../models/video');
 
 
-// var connection = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: 'maverick1', //change your password here.
-//      database: 'nodejs',
-//     port: 3306
-// });
-
-// connection.connect(function(err) {
-//   if (err) {
-//     console.log(err);
-//   }
-// });
-
 module.exports = function(app, passport, io,connection) {
 	// LOGIN
 	app.get('/', function(req, res){
@@ -34,15 +20,35 @@ module.exports = function(app, passport, io,connection) {
 			res.render('register', {user : req.user, message: req.flash('registerMessage') });
 	});
 
+	app.get('/contact', function(req, res){
+
+		res.render('contact');
+	});
+
 	app.get('/logout', function(req, res) {
 		req.logout();
 		res.redirect('/');
+	});
+
+	app.get('/login', function(req, res){
+		if(req.user)
+			res.redirect('/dashboard');
+		else
+			res.render('login', {user : req.user, message: req.flash('registerMessage') });
 	});
 
 	app.post('/login', passport.authenticate('local-login', {
 			successRedirect : '/dashboard',
 			failureRedirect : '/',
 			failureFlash : true
+	}));
+
+
+	app.get('/auth/facebook', passport.authenticate('facebook', {scope:'email'}));
+
+	app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+			successRedirect : '/dashboard',
+			failureRedirect : '/',
 	}));
 
 
@@ -53,6 +59,8 @@ module.exports = function(app, passport, io,connection) {
 		 });
 		 console.log(query.sql);
 		 res.write("Values saved in database");
+		 // var arr=[req.params.temperature,req.params.h,]
+		 // socket.emit('notification',post);
 	});
 
 

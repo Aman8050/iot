@@ -1,5 +1,5 @@
 function light(){
-
+document.getElementById('shivam').style.display = 'block';
 
 document.getElementById("4").style.pointerEvents="none";
 document.getElementById("1").style.pointerEvents="auto";
@@ -33,7 +33,7 @@ document.getElementById("5").style.pointerEvents="auto";
           channel: channel4,
           message: {
             eon: {
-              'Intensity': intensity[intensity.length-1]
+              'Intensity': intensity
             }
           }
         });
@@ -65,7 +65,7 @@ document.getElementById("5").style.pointerEvents="auto";
           channel: channel9,
           message: {
             eon: {
-              'Intensity': intensity[intensity.length-1]
+              'Intensity': intensity
             }
           }
         });

@@ -16,8 +16,35 @@
 <script type="text/javascript" src="http://iop.io/js/vendor/polymer/PointerEvents/pointerevents.js"></script>
 <script type="text/javascript" src="http://iop.io/js/vendor/polymer/PointerGestures/pointergestures.js"></script>
 <script type="text/javascript" src="http://iop.io/js/iopctrl.js"></script>
+<!-- Temperature chart -->
+<script src="js/charts/temperature.js"></script>
+<!-- Humidity chart -->
+<script src="js/charts/humidity.js"></script>
+<!-- Accelerometer chart -->
+<script src="js/charts/acceleration.js"></script>
+<!-- intensity Chart -->
+<script src="js/charts/intensity.js"></script>
+<!-- Motion Detector Chart -->
+<script src="js/charts/motion.js"></script>
+<!-- script to render graph -->
+<script src="/lib/jquery/jquery-2.1.0.min.js"></script>
+<!--Icons-->
+<script src="js/lumino.glyphs.js"></script>
+<script type="text/javascript" src="amcharts.js"></script>
+<script type="text/javascript" src="gauge.js"></script>
+<script src="http://cdn.pubnub.com/pubnub.min.js"></script>
+<script type="text/javascript" src="//pubnub.github.io/eon/v/eon/0.0.10/eon.js"></script>
+<link type="text/css" rel="stylesheet" href="//pubnub.github.io/eon/v/eon/0.0.10/eon.css"/>
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://localhost:8000/socket.io/socket.io.js" type="text/javascript"></script>
 
-
+<script>
+	// function hide()
+	// {
+	// 	document.getElementById('shivam').style.display = 'none';
+	// 	document.getElementById('aman').style.display = 'inline';
+	// }
+</script>
 
 
 <style>
@@ -73,88 +100,76 @@
         }
 </style>   
 
-<!-- script to render graph -->
-<script src="/lib/jquery/jquery-2.1.0.min.js"></script>
 
-<!--Icons-->
-<script src="js/lumino.glyphs.js"></script>
 </head>
 
 
 <body>
 
+<script>
+	FB.ui({
+	  		method: 'share',
+	  		href: 'https://developers.facebook.com/docs/'
+			}, function(response){});
+
+
+
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '1331071003588253',
+	      xfbml      : true,
+	      version    : 'v2.6'
+	    });
+
+		};
+
+	  (function(d, s, id){
+	     var js, fjs = d.getElementsByTagName(s)[0];
+	     if (d.getElementById(id)) {return;}
+	     js = d.createElement(s); js.id = id;
+	     js.src = "//connect.facebook.net/en_US/sdk.js";
+	     fjs.parentNode.insertBefore(js, fjs);
+	   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+
+
+
 <!-- ########################################################################### -->
 <!-- nodejs code and code to render chart -->
-<script type="text/javascript" src="amcharts.js"></script>
-<script type="text/javascript" src="gauge.js"></script>
-<script src="http://cdn.pubnub.com/pubnub.min.js"></script>
-<script type="text/javascript" src="//pubnub.github.io/eon/v/eon/0.0.10/eon.js"></script>
-<link type="text/css" rel="stylesheet" href="//pubnub.github.io/eon/v/eon/0.0.10/eon.css"/>
-<script src="/socket.io/socket.io.js"></script>
+
 
 <script>
+
       $('#uploadForm').submit(function() {
 		 	$("#progressBar").show();
 		 	$("#uploadForm").css("display","none");
 		 });
 
-	 	var socket = io.connect('http://localhost:3000');
+	 	var socket = io.connect('http://localhost:8000');
 	 	
 	 	socket.on('socketId', function(data) {
 	 		return $('#socketId').val(data);
 	 	});
 
-// array to store values of sensors
-temp=[];
-hum=[];
-accx=[];
-accy=[];
-accz=[];
-intensity=[];
-motion=[];
-
-
-//dummy initial data
-temp=[0,0,0,0,0,0,0,0,0,0];
-hum=[0,0,0,0,0,0,0,0,0,0];
-accx=[0,0,0,0,0,0,0,0,0,0];
-accy=[0,0,0,0,0,0,0,0,0,0];
-accz=[0,0,0,0,0,0,0,0,0,0];
-intensity=[0,0,0,0,0,0,0,0,0,0];
-motion=[0,0,0,0,0,0,0,0,0,0];
+		var temp1;
+		var hum1;
+		var accx;
+		var accy;
+		var accz;
+		var intensity;
+		var motion;
 
         // on message received we print all the data inside the #container div
         socket.on('notification', function (data) {
-       // var usersList = "<dl>";
-        $.each(data.users,function(index,user){
-            //usersList += "<dt>" + user.temperature + "</dt>" ;
-	    temp.push(user.temperature);
-      hum.push(user.humidity);
-      accx.push(user.accx);
-      accy.push(user.accy);
-      accz.push(user.accz);
-      intensity.push(user.intensity);
-      motion.push(user.motion);
-
-        if (temp.length > 10)
-            temp.shift();
-        if (hum.length > 10)
-            hum.shift();
-        if (accx.length > 10)
-            accx.shift();
-        if (accy.length > 10)
-            accy.shift();
-        if (accz.length > 10)
-            accz.shift();
-        if (intensity.length > 10)
-            intensity.shift();
-        if (motion.length > 10)
-            motion.shift();
-        
-
-		console.log("fosee" +temp);
-                         
-        });
+  		temp1=data[0];
+  		hum1=data[1];
+  		accx=data[2];
+  		accy=data[3];
+  		accz=data[4];
+  		intensity=data[5];
+  		motion=data[6];
 
 	 	socket.on('upload-progress', function(data) {
  			$('.progress-bar').css('width', data.value+'%').attr('aria-valuenow', data.value).text(data.value+'%');
@@ -164,88 +179,147 @@ motion=[0,0,0,0,0,0,0,0,0,0];
 </script>
 
 
-<!-- Temperature chart -->
-<script src="js/charts/temperature.js"></script>
- 
-<!-- Humidity chart -->
-<script src="js/charts/humidity.js"></script>
-
-<!-- Accelerometer chart -->
-<script src="js/charts/acceleration.js"></script>
-
-<!-- intensity Chart -->
-<script src="js/charts/intensity.js"></script>
-
-<!-- Motion Detector Chart -->
-<script src="js/charts/motion.js"></script>
 
 <!-- original template thing -->
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#"><span>IOT</span>Dashboard</a>
-				<ul class="user-menu">
-					<li class="dropdown pull-right">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> {{user.name}} <span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="/logout"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"></use></svg> Logout</a></li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-							
-		</div><!-- /.container-fluid -->
-	</nav>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#"><span>IOT</span>Dashboard</a>
+			<ul class="user-menu">
+				<li class="dropdown pull-right">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> {{user.name}} <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="/logout"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"></use></svg> Logout</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+						
+	</div><!-- /.container-fluid -->
+</nav>
 		
-	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
-		<ul class="nav menu">
-			<li class="parent ">
-				<a href="#">
-					<span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Sensors 
-				</a>
-				<ul class="children collapse" id="sub-item-1">
-					<li>
- 
-          <a id="1" class=""  value="Temperature" onClick="t()">
-				  <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Temperature
-						</a>
-				</li>
-				<li>
-          <a id="2" class="" value="Humidity" onClick="h()">
-          <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Humidity
-					</a>
-        </li>
-				<li>
-          <a id="3" class="" value="Acceleration" onclick="a()">
-	         <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Acceleration
-					</a>
-				</li>
-				<li>
-            <a id="4" class="" value="Intensity" onClick="light()">
-						<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Intensity
-						</a>
-				</li>
-				<li>
-            <a id="5" class="" value="Motion" onClick="m()">
-						<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Motion
-						</a>
-				</li>
-			</ul>
-			</ul>
-		    </li>
-			  <li role="presentation" class="divider"></li>
-		</ul>
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+	<ul class="nav menu">
+	  <li class="parent ">
+		<a href="#">
+		   <span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Sensors 
+		</a>
+		
+		<ul class="children collapse" id="sub-item-1">
+	
 
-	</div><!--/.sidebar-->
-		
-	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
-	<br>			
+			<li>
+		      <a id="1" class=""  value="Temperature" onClick="t()">
+					  <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Temperature
+			  </a>
+			</li>
+
+			<li>
+		      <a id="2" class="" value="Humidity" onClick="h()">
+		      <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Humidity
+			  </a>
+		    </li>
+
+			<li>
+		      <a id="3" class="" value="Acceleration" onclick="a()">
+		         <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Acceleration
+			  </a>
+			</li>
+			
+			<li>
+		       <a id="4" class="" value="Intensity" onClick="light()">
+					<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Intensity
+				</a>
+			</li>
+
+			<li>
+		       <a id="5" class="" value="Motion" onClick="m()">
+				    <svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Motion
+			   </a>
+			</li>
+
+		</ul>
+	  </li>
+	  <!-- <li role="presentation" class="divider"></li> -->
+
+      <li class="parent">
+		<a id="act" href="#">
+					<span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Actuators
+		</a>
+	  </li>
+	</ul>
+
+
+</div><!--/.sidebar-->
+
+
+	<div id="shivam" class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+	<br>
+
+
+
+		<div class="row">
+			<div class="col-lg-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">First Graph</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<!-- place to render chart -->
+						<!-- add div tag here -->
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<!-- add absolute value graph here -->
+			<div class="col-lg-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">Second Graph</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+						<!-- place to add div tag to render chart -->
+               
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">Third Graph</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+						<!-- place to add div tag to render chart -->
+               
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">Fourth Graph</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+						<!-- place to add div tag to render chart -->
+               
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div><!--/.row-->
+
+
+
+
 		<div class="row">
 			<div class="col-lg-8">
 				<div class="panel panel-default">
@@ -261,13 +335,13 @@ motion=[0,0,0,0,0,0,0,0,0,0];
 			</div>
 
 			<!-- add absolute value graph here -->
-			<div class="col-lg-4">
+		<div class="col-lg-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">Absolute Value Graph</div>
 					<div class="panel-body">
 						<div class="canvas-wrapper">
 						<!-- place to add div tag to render chart -->
-                <div id="chart2" style="width:350px; height:370px;"></div>
+                			<div id="chart2" style="width:350px; height:370px;"></div>
 						</div>
 					</div>
 				</div>
@@ -276,11 +350,78 @@ motion=[0,0,0,0,0,0,0,0,0,0];
 	</div>
 		<!--/.main-->
 
+	<!-- <div id="aman" class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main" style="background-color: red">
+		
+	</div>	 -->
+
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+
+<br>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="second">
+<div id="aman" class="col-sm-12 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+	<br>			
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Actuation</div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<!-- place to render chart -->
+						<button class="btn btn-primary">Button 1</button>
+						<button class="btn btn-primary">Button 2</button>
+						<button class="btn btn-primary">Button 3</button>
+						<button class="btn btn-primary">Button 4</button>
+						<br>
+						<br>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+</div>
+</div>
+
+
+
 <script src="js/bootstrap.min.js"></script>
 <script src="footer.js"></script>
 <script src="functionOnload.js"></script>
+<script>
+$("#act").click(function(){
+	$('html,body').animate({
+		scrollTop: $(".second").offset().top},
+		'slow');
+	});
+
+</script>
 
 
 </body>
+
 </html>
 <!-- end of the code -->

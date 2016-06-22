@@ -1,5 +1,5 @@
 function m(){
-
+document.getElementById('shivam').style.display = 'block';
 document.getElementById("chart2").innerHTML="";
 document.getElementById("5").style.pointerEvents="none";
 document.getElementById("1").style.cursor="pointer";
@@ -37,7 +37,7 @@ document.getElementById("1").style.pointerEvents="auto";
           channel: channel5,
           message: {
             eon: {
-              'Motion-senstivity': motion[motion.length-1]
+              'Motion-senstivity': motion
             }
           }
         });
@@ -82,8 +82,8 @@ document.getElementById("1").style.pointerEvents="auto";
 
         
         setInterval(function(){
-          gauge.value(motion[motion.length-1])
-          segDisplay.value(motion[motion.length-1]);
+          gauge.value(motion)
+          segDisplay.value(motion);
 
         },2000);
     }

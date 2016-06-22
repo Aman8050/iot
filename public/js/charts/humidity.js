@@ -1,6 +1,6 @@
 function h(){
 
-
+document.getElementById('shivam').style.display = 'block';
 
 document.getElementById("2").style.pointerEvents="none";
 document.getElementById("1").style.pointerEvents="auto";
@@ -35,7 +35,7 @@ document.getElementById("5").style.pointerEvents="auto";
           channel: channel2,
           message: {
             eon: {
-              'Humidity': hum[hum.length-1]
+              'Humidity': hum1
             }
           }
         });
@@ -67,7 +67,7 @@ document.getElementById("5").style.pointerEvents="auto";
           channel: channel7,
           message: {
             eon: {
-              'Humidity': hum[hum.length-1]
+              'Humidity': hum1
             }
           }
         });

@@ -1,5 +1,5 @@
 function t(){
-
+document.getElementById('shivam').style.display = 'block';
 document.getElementById("1").style.pointerEvents="none";
 document.getElementById("2").style.pointerEvents="auto";
 document.getElementById("3").style.pointerEvents="auto";
@@ -34,12 +34,13 @@ document.getElementById("5").style.pointerEvents="auto";
           channel: channel1,
           message: {
             eon: {
-              'Temperature': temp[temp.length-1]
+              'Temperature':temp1
             }
           }
         });
 
       }, 1000);
+
 
 
 
@@ -79,7 +80,7 @@ setInterval( randomValue, 2000 );
 
 // set random value
 function randomValue() {
-  var value = temp[temp.length-1];
+  var value = temp1;
   if ( gaugeChart ) {
     if ( gaugeChart.arrows ) {
       if ( gaugeChart.arrows[ 0 ] ) {
